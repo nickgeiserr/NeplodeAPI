@@ -1,10 +1,10 @@
 package models
 
 type User struct {
-	id             string
-	username       string
-	bio            string
-	birthday       string
-	profilePicture string
-	creationDate   string
+	ID             string
+	Username       string
+	Bio            string
+	Birthday       string
+	ProfilePicture string
+	CreationDate   string
 }
