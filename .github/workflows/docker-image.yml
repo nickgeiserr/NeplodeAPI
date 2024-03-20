@@ -15,8 +15,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag neplode_api:$(date +%s)
-    - name: Login to DockerHub
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: Push Image to DockerHub
+      run: |
+        docker build . --file Dockerfile --tag neplode_api:$(date +%s)
+        docker tag neplode_api:$(date +%s) nickgeiser/neplode_api:$(date +%s)
+
+  push_to_dockerhub:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Log in to Docker Hub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+    - name: Push image to Docker Hub
       run: docker push nickgeiser/neplode_api:$(date +%s)
