@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker CI
 
 on:
   push:
@@ -15,8 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: |
-        docker build . --file Dockerfile --tag nickgeiser/neplode_api:latest
+      run: docker build . --file Dockerfile --tag nickgeiser/neplode_api:latest
 
   push_to_dockerhub:
     needs: build
@@ -24,5 +23,7 @@ jobs:
     steps:
     - name: Log in to Docker Hub
       run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+    - name: Tag image
+      run: docker tag nickgeiser/neplode_api:latest nickgeiser/neplode_api:latest
     - name: Push image to Docker Hub
       run: docker push nickgeiser/neplode_api:latest
