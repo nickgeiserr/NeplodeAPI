@@ -21,7 +21,7 @@ func CreateUser(s *stores.Stores) {
 
 	newUser := models.User{
 		ID:             "2",
-		Username:       "tes`tuser",
+		Username:       "testuser",
 		Bio:            "Test bio",
 		Birthday:       "2000-01-01",
 		ProfilePicture: "profile.jpg",
