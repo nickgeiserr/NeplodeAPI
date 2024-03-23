@@ -10,6 +10,7 @@ type (
 		GetUsers() ([]models.User, error)
 		CreateUser(user *models.User) bool
 		GetUser(uid string) (*models.User, error)
+		UpdateUser(updatedUser *models.User) bool
 	}
 
 	userService struct {
@@ -29,5 +30,10 @@ func (u userService) GetUser(uid string) (*models.User, error) {
 
 func (u userService) CreateUser(user *models.User) bool {
 	r := stores.UserStore.CreateUser(*u.stores, user)
+	return r
+}
+
+func (u userService) UpdateUser(updatedUser *models.User) bool {
+	r := stores.UserStore.UpdateUser(*u.stores, updatedUser)
 	return r
 }
