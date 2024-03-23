@@ -22,7 +22,8 @@ func SetAPI(e *echo.Echo, h *Handlers, m echo.MiddlewareFunc) {
 	g.Use(m)
 
 	// User
-	g.GET("/users/:uid", h.UserHandler.GetUsers)
+	g.GET("/users/:uid", h.UserHandler.GetUser)
+	g.POST("/users", h.UserHandler.CreateUser)
 }
 
 func Echo() *echo.Echo {
