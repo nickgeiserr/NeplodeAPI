@@ -6,16 +6,15 @@ import (
 	"NeplodeAPI/middleware"
 	"NeplodeAPI/services"
 	"NeplodeAPI/stores"
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"log"
 	"os"
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+	//if err := godotenv.Load(); err != nil {
+	//	log.Fatalf("Error loading .env file: %v", err)
+	//}
 }
 
 func main() {
