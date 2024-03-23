@@ -15,6 +15,7 @@ type (
 		GetUsers(c echo.Context) error
 		CreateUser(c echo.Context) error
 		GetUser(c echo.Context) error
+		UpdateUser(c echo.Context) error
 	}
 
 	userHandler struct {
@@ -40,7 +41,7 @@ func (u userHandler) GetUser(c echo.Context) error {
 	uid := c.Param("uid")
 	user, err := u.UserService.GetUser(uid)
 	if err != nil {
-		logger.Fatal("Something went wrong", zap.Error(err))
+		logger.Error("Something went wrong", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, "Internal Server Error")
 	}
 
@@ -50,7 +51,8 @@ func (u userHandler) GetUser(c echo.Context) error {
 func (u userHandler) CreateUser(c echo.Context) error {
 	user := new(models.User)
 	if err := c.Bind(user); err != nil {
-		logger.Fatal("Something went wrong with binding.", zap.Error(err))
+		logger.Error("Something went wrong with binding.", zap.Error(err))
+		return c.JSON(http.StatusInternalServerError, "Internal Server Error.")
 	}
 
 	if user.Username == "" || user.Birthday == "" {
@@ -64,9 +66,25 @@ func (u userHandler) CreateUser(c echo.Context) error {
 
 	r := u.UserService.CreateUser(user)
 	if r == false {
-		logger.Fatal("Something went wrong creating the user.")
+		logger.Error("Something went wrong creating the user.")
 		return c.JSON(http.StatusInternalServerError, "Internal Server Issue.")
 	}
 
 	return c.JSON(http.StatusOK, user.ID)
+}
+
+func (u userHandler) UpdateUser(c echo.Context) error {
+	user := new(models.User)
+	if err := c.Bind(user); err != nil {
+		logger.Error("Something went wrong with binding.", zap.Error(err))
+		return c.JSON(http.StatusInternalServerError, "Internal Server Error.")
+	}
+
+	r := u.UserService.UpdateUser(user)
+	if r == false {
+		logger.Error("Something went wrong creating the user.")
+		return c.JSON(http.StatusInternalServerError, "Internal Server Issue.")
+	}
+
+	return c.JSON(http.StatusOK, user)
 }
