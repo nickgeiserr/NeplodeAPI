@@ -13,6 +13,7 @@ type (
 		GetAll() ([]models.User, error)
 		CreateUser(newUser *models.User) bool
 		GetUser(uid string) (*models.User, error)
+		UpdateUser(updatedUser *models.User) bool
 	}
 
 	userStore struct {
@@ -59,5 +60,21 @@ func (u userStore) CreateUser(newUser *models.User) bool {
 		return false
 	}
 	row.Close()
+	return true
+}
+
+func (u userStore) UpdateUser(updatedUser *models.User) bool {
+	query := "UPDATE users SET username = $1, bio = $2, birthday = $3, profile_picture = $4 WHERE id = $5"
+
+	if database.DB == nil {
+		logger.Fatal("Database connection is nil")
+	}
+
+	_, err := database.DB.Exec(context.Background(), query, updatedUser.Username, updatedUser.Bio, updatedUser.Birthday, updatedUser.ProfilePicture, updatedUser.ID)
+	if err != nil {
+		logger.Error("Failed to update user: ", zap.Error(err))
+		return false
+	}
+
 	return true
 }
