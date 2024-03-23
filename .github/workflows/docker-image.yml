@@ -26,3 +26,9 @@ jobs:
         docker build --file Dockerfile --tag nickgeiser/neplode_api:latest .
         echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
         docker push nickgeiser/neplode_api:latest
+    
+    - name: Trigger URL endpoint
+      env:
+        DEPLOY_WEBHOOK: ${{ secrets.DEPLOY_WEBHOOK }}
+      run: |
+        curl -X POST $DEPLOY_WEBHOOK
