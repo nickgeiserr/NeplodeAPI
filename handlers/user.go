@@ -80,6 +80,10 @@ func (u userHandler) UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Internal Server Error.")
 	}
 
+	if c.Get("claims").(*validator.ValidatedClaims).RegisteredClaims.Subject != user.ID {
+		return c.JSON(http.StatusUnauthorized, "You can not update this user.")
+	}
+
 	r := u.UserService.UpdateUser(user)
 	if r == false {
 		logger.Error("Something went wrong creating the user.")
