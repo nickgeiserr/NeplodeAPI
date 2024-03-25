@@ -8,11 +8,13 @@ import (
 
 type Handlers struct {
 	UserHandler
+	ChapterHandler
 }
 
 func New(s *services.Services) *Handlers {
 	return &Handlers{
-		UserHandler: &userHandler{s.User},
+		UserHandler:    &userHandler{s.User},
+		ChapterHandler: &chapterHandler{s.Chapter},
 	}
 }
 
@@ -25,6 +27,17 @@ func SetAPI(e *echo.Echo, h *Handlers, m echo.MiddlewareFunc) {
 	g.GET("/users/:uid", h.UserHandler.GetUser)
 	g.POST("/users", h.UserHandler.CreateUser)
 	g.PUT("/users", h.UserHandler.UpdateUser)
+
+	// Chapter
+	g.GET("/chapters/:chId", h.ChapterHandler.GetChapter)
+	g.POST("/chapters", h.ChapterHandler.CreateChapter)
+	g.PUT("/chapters/:chId", h.ChapterHandler.UpdateChapter)
+	g.DELETE("/chapters/:chId", h.ChapterHandler.DeleteChapter)
+
+	// Membership
+	g.POST("/chapters/:chId/members", h.ChapterHandler.JoinChapter)
+	g.DELETE("/chapters/:chId/members", h.ChapterHandler.LeaveChapter)
+
 }
 
 func Echo() *echo.Echo {

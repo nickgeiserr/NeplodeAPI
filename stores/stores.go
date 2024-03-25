@@ -1,11 +1,13 @@
 package stores
 
 type Stores struct {
-	User UserStore
+	User    UserStore
+	Chapter ChapterStore
 }
 
 func New() *Stores {
 	return &Stores{
-		User: &userStore{},
+		User:    &userStore{},
+		Chapter: &chapterStore{},
 	}
 }
